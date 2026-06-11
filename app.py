@@ -4,6 +4,15 @@ import streamlit as st
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from memories import MEMORIES
+@st.cache_data
+def load_images():
+    photo_folder = "photos"
+    images = [
+        f for f in os.listdir(photo_folder)
+        if f.lower().endswith((".jpg", ".jpeg", ".png"))
+    ]
+    images.sort()
+    return images
 
 # =========================
 # CONFIG
@@ -109,13 +118,16 @@ now = datetime.now()
 relationship_delta = relativedelta(now, relationship_start)
 talk_delta = relativedelta(now, first_talk)
 
-photo_folder = "photos"
+# photo_folder = "photos"
 
-images = sorted(
-    [f for f in os.listdir(photo_folder)
-     if f.lower().endswith((".jpg", ".jpeg", ".png"))],
-    key=lambda x: int(os.path.splitext(x)[0].replace("pic", ""))
-)
+# images = sorted(
+#     [f for f in os.listdir(photo_folder)
+#      if f.lower().endswith((".jpg", ".jpeg", ".png"))],
+#     key=lambda x: int(os.path.splitext(x)[0].replace("pic", ""))
+# )
+photo_folder = "photos"
+images = load_images()
+
 
 relationship_score = min(100, 85 + len(images)//2)
 rating = "AAA ❤️"
