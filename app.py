@@ -1,3 +1,4 @@
+PASSWORD = "tumaurhum"
 import os
 import random
 import streamlit as st
@@ -13,6 +14,30 @@ st.set_page_config(
     page_icon="❤️",
     layout="centered"
 )
+import streamlit as st
+
+# --------------------------
+# PASSWORD GATE
+# --------------------------
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+
+    st.title("🔒 Private Terminal")
+
+    pwd = st.text_input("Enter Password", type="password")
+
+    if st.button("Unlock"):
+
+        if pwd == PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect password")
+
+    st.stop()
 
 # ==========================================
 # CUSTOM CSS
