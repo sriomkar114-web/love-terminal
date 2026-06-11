@@ -1,459 +1,262 @@
-PASSWORD = "tumaurhum"
 import os
 import random
+import time
 import streamlit as st
-from datetime import date
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 from memories import MEMORIES
 
-# ==========================================
-# PAGE CONFIG
-# ==========================================
-
+# =========================
+# CONFIG
+# =========================
 st.set_page_config(
     page_title="LOVE Terminal",
     page_icon="❤️",
     layout="centered"
 )
+
+PASSWORD = "tumaurhum"
+
+# =========================
+# MOBILE-FIRST + CINEMATIC UI
+# =========================
 st.markdown("""
 <style>
 
-/* Netflix-style dark background */
-body {
-    background: radial-gradient(circle at top, #111 0%, #000 100%);
+/* GLOBAL BACKGROUND */
+.stApp {
+    background: radial-gradient(circle at top, #0a0a0a, #000000);
+    color: white;
 }
 
-/* Main title animation */
+/* REMOVE STREAMLIT CHROME */
+header, footer {
+    visibility: hidden;
+}
+
+/* MOBILE RESPONSIVE */
+.block-container {
+    padding: 1.2rem 1rem 2rem 1rem;
+}
+
+/* TITLE */
+.title {
+    font-size: 36px;
+    font-weight: 900;
+    text-align: center;
+    color: #00ff88;
+    text-shadow: 0 0 12px rgba(0,255,136,0.25);
+    margin-bottom: 10px;
+}
+
+/* CARD SYSTEM */
+.card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 12px 0;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* FADE IN */
 @keyframes fadeIn {
-    0% {opacity: 0; transform: translateY(-20px);}
+    0% {opacity: 0; transform: translateY(10px);}
     100% {opacity: 1; transform: translateY(0);}
 }
 
-.netflix-title {
-    font-size: 48px;
-    font-weight: 800;
-    color: #e50914;
-    text-align: center;
-    animation: fadeIn 1.2s ease-in-out;
-    letter-spacing: 2px;
+/* METRICS MOBILE FIX */
+[data-testid="stMetricValue"] {
+    font-size: 22px;
+    color: #00ff88;
 }
 
-/* Subtext glow */
-.glow-text {
-    text-align: center;
-    color: #aaa;
-    font-size: 16px;
-    animation: fadeIn 2s ease-in-out;
-}
-
-/* Login box */
-.login-box {
-    background: rgba(20,20,20,0.8);
-    padding: 30px;
+/* NEWS BOX */
+.news {
+    padding: 12px;
     border-radius: 12px;
-    border: 1px solid #333;
-    width: 300px;
-    margin: auto;
-    box-shadow: 0 0 20px rgba(229,9,20,0.3);
-    animation: fadeIn 1.5s ease-in-out;
+    background: rgba(229,9,20,0.08);
+    border: 1px solid rgba(229,9,20,0.25);
 }
 
-/* Button glow */
+/* BUTTONS */
 .stButton>button {
-    background-color: #e50914;
-    color: white;
-    border-radius: 6px;
+    background: linear-gradient(90deg, #00ff88, #00c3ff);
+    color: black;
+    font-weight: bold;
+    border-radius: 10px;
     border: none;
     width: 100%;
-    padding: 10px;
 }
 
 .stButton>button:hover {
-    box-shadow: 0 0 15px #e50914;
     transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(0,255,136,0.4);
+}
+
+/* IMAGE STYLE */
+img {
+    border-radius: 14px;
 }
 
 </style>
 """, unsafe_allow_html=True)
-import streamlit as st
 
-# --------------------------
-# PASSWORD GATE
-# --------------------------
-
-import time
-import streamlit as st
-
-PASSWORD = "tumaurhum"
-
+# =========================
+# AUTH SYSTEM
+# =========================
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
 if not st.session_state.auth:
 
-    st.markdown('<div class="netflix-title">LOVE TERMINAL</div>', unsafe_allow_html=True)
-    st.markdown('<div class="glow-text">Initializing secure emotional connection...</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title">❤️ LOVE TERMINAL</div>', unsafe_allow_html=True)
+    st.caption("A private emotional system")
 
-    time.sleep(0.5)
+    pwd = st.text_input("Enter Access Code", type="password")
 
-    with st.container():
-        st.markdown('<div class="login-box">', unsafe_allow_html=True)
-
-        pwd = st.text_input("Enter Access Code", type="password")
-
-        if st.button("Unlock"):
-            if pwd == PASSWORD:
-                st.session_state.auth = True
-                st.rerun()
-            else:
-                st.error("Access Denied")
-
-        st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("Unlock"):
+        if pwd == PASSWORD:
+            st.session_state.auth = True
+            st.rerun()
+        else:
+            st.error("Access Denied")
 
     st.stop()
 
-# ==========================================
-# CUSTOM CSS
-# ==========================================
-
-st.markdown("""
-<style>
-
-html, body, [class*="css"] {
-    background-color: #0d1117;
-}
-
-.big-ticker {
-    font-size: 42px;
-    font-weight: bold;
-    color: #00ff88;
-}
-
-.metric-box {
-    border: 1px solid #333;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-img {
-    border-radius: 18px !important;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# ==========================================
-# DYNAMIC DATA
-# ==========================================
-
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
-relationship_start = datetime(
-    2018, 11, 3, 0, 30
-)
-
-first_talk = datetime(
-    2014, 4, 29, 0, 0
-)
-
+# =========================
+# DATA
+# =========================
+relationship_start = datetime(2018, 11, 3, 0, 30)
+first_talk = datetime(2014, 4, 29, 0, 0)
 now = datetime.now()
 
-relationship_delta = relativedelta(
-    now,
-    relationship_start
-)
-
-talk_delta = relativedelta(
-    now,
-    first_talk
-)
+relationship_delta = relativedelta(now, relationship_start)
+talk_delta = relativedelta(now, first_talk)
 
 photo_folder = "photos"
 
 images = sorted(
     [
-        file
-        for file in os.listdir(photo_folder)
-        if file.lower().endswith(
-            (".jpg", ".jpeg", ".png")
-        )
+        f for f in os.listdir(photo_folder)
+        if f.lower().endswith((".jpg", ".jpeg", ".png"))
     ],
-    key=lambda x: int(
-        os.path.splitext(x)[0].replace("pic", "")
-    )
+    key=lambda x: int(os.path.splitext(x)[0].replace("pic", ""))
 )
 
-relationship_score = min(
-    100,
-    85 + len(images) // 2
-)
-
+relationship_score = min(100, 85 + len(images)//2)
 rating = "AAA ❤️"
 
 NEWS_HEADLINES = [
-
     "Girlfriend remains highest-performing asset in portfolio.",
-
     "Relationship Index closes at all-time highs.",
-
-    "Analysts upgrade Aanchal Holdings to STRONG BUY.",
-
     "Pasta Date Night exceeds expectations.",
-
     "Emotional liquidity remains abundant.",
-
-    "Management guidance remains unchanged: Forever.",
-
-    "Boyfriend spotted smiling at phone again.",
-
     "Long-term outlook remains exceptionally bullish."
 ]
 
-# ==========================================
+# =========================
+# AUTO RANDOM MEMORY (NEW FEATURE)
+# =========================
+random_image = random.choice(images)
+random_image_path = os.path.join(photo_folder, random_image)
+random_caption = MEMORIES.get(os.path.splitext(random_image)[0], "A beautiful memory ❤️")
+
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.subheader("💌 Memory Drop (Auto Generated)")
+st.image(random_image_path, use_container_width=True)
+st.write(random_caption)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# =========================
 # HEADER
-# ==========================================
+# =========================
+st.markdown('<div class="title">💚 LOVE TERMINAL</div>', unsafe_allow_html=True)
+st.caption("Relationship Exchange • Emotional Market Dashboard")
 
-st.markdown(
-    '<p class="big-ticker">$LOVE ▲ 4.23%</p>',
-    unsafe_allow_html=True
-)
-
-st.caption(
-    "Relationship Exchange • S&A Markets"
-)
-
-# ==========================================
-# MARKET STATUS
-# ==========================================
-
-# ==========================================
-# TERMINAL OVERVIEW
-# ==========================================
-
-st.info(f"""
-MARKET STATUS: OPEN
-
-Ticker: $LOVE
-Exchange: S&A
-
-Primary Listing:
-03-Nov-2018 00:30
-
-Coverage Initiated:
-29-Apr-2014
-
-Credit Rating:
-{rating}
-""")
-
-st.divider()
-
-st.subheader("📊 SECURITY OVERVIEW")
-
-st.metric(
-    "Relationship Runtime",
-    f"{relationship_delta.years}Y "
-    f"{relationship_delta.months}M "
-    f"{relationship_delta.days}D"
-)
-
-st.caption(
-    f"{relationship_delta.hours}H "
-    f"{relationship_delta.minutes}M "
-    f"{relationship_delta.seconds}S"
-)
-
-st.metric(
-    "First Contact Runtime",
-    f"{talk_delta.years}Y "
-    f"{talk_delta.months}M "
-    f"{talk_delta.days}D"
-)
-
-st.caption(
-    f"{talk_delta.hours}H "
-    f"{talk_delta.minutes}M "
-    f"{talk_delta.seconds}S"
-)
-
-c1, c2 = st.columns(2)
-
-with c1:
-    st.metric(
-        "Memories Archived",
-        len(images)
-    )
-
-with c2:
-    st.metric(
-        "Relationship Index",
-        relationship_score
-    )
-
-# ==========================================
-# NEWSWIRE
-# ==========================================
-
-st.divider()
-
-st.subheader("📰 RELATIONSHIP NEWSWIRE")
-
-st.warning(
-    random.choice(
-        NEWS_HEADLINES
-    )
-)
-
-# ==========================================
-# ANALYST COVERAGE
-# ==========================================
-
-st.divider()
-
-st.subheader(
-    "📊 ANALYST COVERAGE"
-)
-
-st.success(f"""
+# =========================
+# STATUS CARD
+# =========================
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.write(f"""
+MARKET STATUS: OPEN  
+Ticker: $LOVE  
 Rating: {rating}
-
-Target Price:
-∞
-
-Investment Thesis:
-
-• Strong long-term fundamentals
-
-• Consistent emotional returns
-
-• Exceptional management quality
-
-• High growth visibility
-
-Recommendation:
-STRONG BUY
 """)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# ==========================================
-# RELATIONSHIP INDEX
-# ==========================================
+# =========================
+# METRICS
+# =========================
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.subheader("📊 Relationship Metrics")
 
-st.divider()
+st.metric("Relationship Runtime",
+          f"{relationship_delta.years}Y {relationship_delta.months}M {relationship_delta.days}D")
 
-st.subheader(
-    "📈 RELATIONSHIP INDEX"
-)
+st.metric("First Contact",
+          f"{talk_delta.years}Y {talk_delta.months}D")
 
-st.progress(
-    relationship_score
-)
+st.metric("Memories Archived", len(images))
+st.metric("Relationship Index", relationship_score)
 
-st.caption(
-    f"Current Score: {relationship_score}/100"
-)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# ==========================================
+# =========================
+# NEWS
+# =========================
+st.markdown('<div class="card news">', unsafe_allow_html=True)
+st.subheader("📰 Newswire")
+st.write(random.choice(NEWS_HEADLINES))
+st.markdown('</div>', unsafe_allow_html=True)
+
+# =========================
+# ANALYST
+# =========================
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.subheader("📊 Analyst Coverage")
+st.success("STRONG BUY • Target: ∞")
+st.markdown('</div>', unsafe_allow_html=True)
+
+# =========================
+# INDEX
+# =========================
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.subheader("📈 Relationship Index")
+st.progress(relationship_score)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# =========================
 # MEMORY ARCHIVE
-# ==========================================
-
+# =========================
 st.divider()
 
-with st.expander(
-    f"🎞 MEMORY ARCHIVE ({len(images)})",
-    expanded=False
-):
+with st.expander(f"🎞 Memory Archive ({len(images)})"):
 
     if "memory_index" not in st.session_state:
         st.session_state.memory_index = 0
 
-    current_file = images[
-        st.session_state.memory_index
-    ]
+    current_file = images[st.session_state.memory_index]
+    path = os.path.join(photo_folder, current_file)
+    base = os.path.splitext(current_file)[0]
 
-    image_path = os.path.join(
-        photo_folder,
-        current_file
-    )
+    st.image(path, use_container_width=True)
+    st.write(MEMORIES.get(base, "A beautiful memory ❤️"))
 
-    base_name = os.path.splitext(
-        current_file
-    )[0]
+    col1, col2, col3 = st.columns(3)
 
-    caption = MEMORIES.get(
-        base_name,
-        "A beautiful memory ❤️"
-    )
+    with col1:
+        if st.button("⬅️") and st.session_state.memory_index > 0:
+            st.session_state.memory_index -= 1
+            st.rerun()
 
-    st.image(
-        image_path,
-        use_container_width=True
-    )
+    with col3:
+        if st.button("➡️") and st.session_state.memory_index < len(images)-1:
+            st.session_state.memory_index += 1
+            st.rerun()
 
-    st.markdown(
-        f"""
-### MEMORY RECORD
-
-**Asset ID:** {base_name.upper()}
-
-**Commentary:** {caption}
-"""
-    )
-
-    st.caption(
-        f"Record {st.session_state.memory_index + 1} of {len(images)}"
-    )
-
-    left, center, right = st.columns(
-        [1, 1, 1]
-    )
-
-    with left:
-
-        if st.button(
-            "⬅️",
-            use_container_width=True
-        ):
-
-            if st.session_state.memory_index > 0:
-
-                st.session_state.memory_index -= 1
-                st.rerun()
-
-    with center:
-
-        st.markdown(
-            "<h3 style='text-align:center'>❤️</h3>",
-            unsafe_allow_html=True
-        )
-
-    with right:
-
-        if st.button(
-            "➡️",
-            use_container_width=True
-        ):
-
-            if (
-                st.session_state.memory_index
-                < len(images) - 1
-            ):
-
-                st.session_state.memory_index += 1
-                st.rerun()
-
-# ==========================================
+# =========================
 # FOOTER
-# ==========================================
-
+# =========================
 st.divider()
-
-st.caption(
-    f"""
-Terminal Version 2.0
-
-Last Updated:
-{date.today()}
-
-For Internal Use Only
-"""
-)
+st.caption(f"Terminal v2.0 • {date.today()} • Private Build")
