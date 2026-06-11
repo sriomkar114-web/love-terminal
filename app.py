@@ -14,28 +14,100 @@ st.set_page_config(
     page_icon="❤️",
     layout="centered"
 )
+st.markdown("""
+<style>
+
+/* Netflix-style dark background */
+body {
+    background: radial-gradient(circle at top, #111 0%, #000 100%);
+}
+
+/* Main title animation */
+@keyframes fadeIn {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+.netflix-title {
+    font-size: 48px;
+    font-weight: 800;
+    color: #e50914;
+    text-align: center;
+    animation: fadeIn 1.2s ease-in-out;
+    letter-spacing: 2px;
+}
+
+/* Subtext glow */
+.glow-text {
+    text-align: center;
+    color: #aaa;
+    font-size: 16px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Login box */
+.login-box {
+    background: rgba(20,20,20,0.8);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    width: 300px;
+    margin: auto;
+    box-shadow: 0 0 20px rgba(229,9,20,0.3);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Button glow */
+.stButton>button {
+    background-color: #e50914;
+    color: white;
+    border-radius: 6px;
+    border: none;
+    width: 100%;
+    padding: 10px;
+}
+
+.stButton>button:hover {
+    box-shadow: 0 0 15px #e50914;
+    transform: scale(1.02);
+}
+
+</style>
+""", unsafe_allow_html=True)
 import streamlit as st
 
 # --------------------------
 # PASSWORD GATE
 # --------------------------
 
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
+import time
+import streamlit as st
 
-if not st.session_state.authenticated:
+PASSWORD = "tumaurhum"
 
-    st.title("🔒 Private Terminal")
+if "auth" not in st.session_state:
+    st.session_state.auth = False
 
-    pwd = st.text_input("Enter Password", type="password")
+if not st.session_state.auth:
 
-    if st.button("Unlock"):
+    st.markdown('<div class="netflix-title">LOVE TERMINAL</div>', unsafe_allow_html=True)
+    st.markdown('<div class="glow-text">Initializing secure emotional connection...</div>', unsafe_allow_html=True)
 
-        if pwd == PASSWORD:
-            st.session_state.authenticated = True
-            st.rerun()
-        else:
-            st.error("Incorrect password")
+    time.sleep(0.5)
+
+    with st.container():
+        st.markdown('<div class="login-box">', unsafe_allow_html=True)
+
+        pwd = st.text_input("Enter Access Code", type="password")
+
+        if st.button("Unlock"):
+            if pwd == PASSWORD:
+                st.session_state.auth = True
+                st.rerun()
+            else:
+                st.error("Access Denied")
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.stop()
 
