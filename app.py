@@ -145,7 +145,7 @@ random_path = os.path.join(photo_folder, random_image)
 random_caption = MEMORIES.get(os.path.splitext(random_image)[0], "A beautiful memory ❤️")
 
 st.markdown('<div class="card">', unsafe_allow_html=True)
-st.subheader("💌 Memory Drop (Auto on Open)")
+st.subheader("Memories with you💌")
 st.image(random_path, use_container_width=True)
 st.write(random_caption)
 st.markdown('</div>', unsafe_allow_html=True)
